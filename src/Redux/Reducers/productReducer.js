@@ -8,6 +8,239 @@ import { updateDoc, doc, arrayUnion, onSnapshot, arrayRemove } from "firebase/fi
 // for toast notificatioins
 import { toast } from "react-toastify";
 
+
+
+
+// return date in yy/mm/dd format
+function getDate(){
+    // getting current date
+    const date = new Date();
+    // day 
+    let day = date.getDate();
+    // month
+    let month = date.getMonth() + 1;
+    // year
+    let year = date.getFullYear();
+    // yy/mm/dd format
+    return(`${year}-${month}-${day}`);
+}
+
+
+
+
+// async thunk to get initial Data of cart items and order placed by user from database
+export const getInitialCartOrdersThunk = createAsyncThunk(
+    'product/getCartOrders',
+    (args,thunkAPI) => {
+        // getting user's data from redux store
+        const {authReducer,productReducer} = thunkAPI.getState();
+        const {isLoggedIn,userLoggedIn} = authReducer;
+        
+        // whether user logged In
+        if(isLoggedIn){
+            // getting real-time update of data
+
+            const unsub = onSnapshot(doc(db, "buybusy-redux",userLoggedIn.id), (doc) => {
+                // storing all the data in cart
+                const data = doc.data();
+                thunkAPI.dispatch(setCart(data.cart));
+                thunkAPI.dispatch(setMyOrders(data.orders));
+            });
+            
+            // returning the cart to extraReducer for further operations
+            return productReducer.cart;
+        }
+    }
+)
+
+
+
+
+// async thunk to update cart inside the database
+const updateCartInDatabase = createAsyncThunk(
+    'product/updateCartInDatabase',
+    async(args,thunkAPI) => {
+
+        // user's data from initialState
+        const {authReducer, productReducer} = thunkAPI.getState();
+        const { userLoggedIn } = authReducer;
+
+        // update the cart inside the firebase database
+        const userRef = doc(db, "buybusy-redux", userLoggedIn.id);
+        await updateDoc(userRef, {
+            cart: productReducer.cart
+        });
+    }
+)
+
+
+// increase product quantity in cart and database
+export const increaseQuantThunk = createAsyncThunk(
+    "product/increaseProductQuantity",
+    async (product,thunkAPI) => {
+        // user's data
+        const {productReducer} = thunkAPI.getState();
+
+        // finding product inside the cart
+        const index=productReducer.cart.findIndex((item) => item.name === product.name);
+        
+        // increase the quantity of product in initialState cart
+        thunkAPI.dispatch(increaseProductQuantity(index));      
+        
+        // increase total amount of products in cart
+        thunkAPI.dispatch(increaseTotalAmount(product.price));
+
+        // update the cart inside the database
+        thunkAPI.dispatch(updateCartInDatabase());
+    }
+)
+
+
+
+
+// decrease the quantity of product in cart and database
+export const decreaseQuantThunk = createAsyncThunk(
+    "product/decreaseProductQuantity",
+    async (product, thunkAPI) => {
+        // getting user's data 
+        const { productReducer } = thunkAPI.getState();
+        
+        // finding the product inside the cart 
+        const index=productReducer.cart.findIndex((item) => item.name === product.name);
+        
+        // if quantity of product is 1 then remove it from the cart
+        if(productReducer.cart[index].quantity === 1){
+            thunkAPI.dispatch(removeFromCartThunk(product));
+            return;
+        }
+
+        // else
+        // decrease the quantity of product inside the cart
+        thunkAPI.dispatch(decreaseProductQuantity(index));
+
+        // reduce the amount of product from total amount of cart
+        thunkAPI.dispatch(reduceTotalAmount(productReducer.cart[index].price));
+
+        // update the cart inside the database
+        thunkAPI.dispatch(updateCartInDatabase());
+    }
+)
+
+
+
+
+//async hunk for adding a new product to the cart
+export const addToCartThunk = createAsyncThunk(
+    "product/addToCart",
+    async (product, thunkAPI) => {
+        const { authReducer, productReducer } = thunkAPI.getState();
+        const { isLoggedIn, userLoggedIn } = authReducer;
+
+        // check whether user is logged in or not 
+        if(!isLoggedIn){
+            toast.error("Please first Login !!!");
+            return;
+        }
+
+        // checking whether the product already in the cart
+        const index=productReducer.cart.findIndex((item) => item.name === product.name);
+        if(index !== -1){
+            // if product already in cart then increase quantity and return
+            thunkAPI.dispatch(increaseQuantThunk(productReducer.cart[index]));
+            toast.success("Product Quantity Increased!!");
+            return;
+        }
+
+        // else
+        // add product to the cart of loggedIn user in database
+        const userRef = doc(db, "buybusy-redux", userLoggedIn.id);
+        await updateDoc(userRef, {
+            cart: arrayUnion({quantity:1,...product})
+        });
+        
+        // increase total amount and product quantity
+        thunkAPI.dispatch(increaseTotalAmount(product.price));
+        thunkAPI.dispatch(increaseTotalItem());
+
+        // notification
+        toast.success("Added to your Cart!!");
+    }
+) 
+
+
+
+// remove product from the cart
+export const removeFromCartThunk = createAsyncThunk(
+    "product/removeFromCart",
+    async(product, thunkAPI) => {
+        // getting user's data
+        const { authReducer } = thunkAPI.getState();
+        const {userLoggedIn} = authReducer;
+        
+        // remove the product from cart in database 
+        const userRef = doc(db, "buybusy-redux", userLoggedIn.id);
+        await updateDoc(userRef, {
+            cart: arrayRemove(product)
+        });
+
+        // returning product to the extraReducer for further operations
+        return product;
+    }
+)
+
+
+// async thunk to remove all the products from the cart
+export const clearCartThunk = createAsyncThunk(
+    "product/emptyCart",
+    async (args, thunkAPI) => {
+        // getting user's data
+        const { authReducer, productReducer} = thunkAPI.getState();
+        const { userLoggedIn } = authReducer;
+
+        // if no item in cart then return with message
+        if(productReducer.itemInCart === 0){
+            toast.error("othing to remove in Cart!!");
+            return;
+        }
+
+        // empty cart array in database
+        const userRef = doc(db, 'buybusy-redux', userLoggedIn.id);
+        await updateDoc(userRef, {
+            cart: []
+        });
+
+        // notofication
+        toast.success("empty Cart!!");
+    }
+);
+
+
+// sync thunk to purchase all the product indis the cart
+export const purchaseAllThunk = createAsyncThunk(
+    "product/purchaseAllItems",
+    async (args, thunkAPI) => {
+        // getting user's data
+        const { authReducer, productReducer } = thunkAPI.getState();
+        const { userLoggedIn } = authReducer;
+
+        // get current data from function
+        const currentData = getDate();
+
+        // adding order to database with data, product and amount
+        const userRef = doc(db, "buybusy-redux", userLoggedIn.id);
+        await updateDoc(userRef, {
+            orders: arrayUnion({ data: currentData,
+                                list: productReducer.cart,
+                                amount: productReducer.total})
+        });
+
+        // removng all the product's from cart
+        thunkAPI.dispatch(clearCartThunk());
+    }
+);
+
+
+
 // slice to manage operation of products
 const productSlice = createSlice({
     name: "product",
@@ -90,7 +323,7 @@ const productSlice = createSlice({
         })
 
         // update state after removing product from cart and database
-        .addCase(removeFormCartThunk.fulfilled, (state, action) => {
+        .addCase(removeFromCartThunk.fulfilled, (state, action) => {
             const product = action.payload;
             // reduce item count and total amount
             state.total -= product.quantity * product.price;
