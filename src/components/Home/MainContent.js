@@ -2,11 +2,10 @@ import ItemCard from './ItemCard';
 
 import styles from '../../styles/home.module.css';
 
-import { useProductContext } from '../../productContext';
+// getting all the product data
+import { data } from "../../Assets/data";
 
 function MainContent(props){
-    // product data
-    const { data } = useProductContext();
     const { search, price, category } = props
 
     console.log('search: ',search);

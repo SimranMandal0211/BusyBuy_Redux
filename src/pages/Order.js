@@ -4,11 +4,14 @@ import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import { useProductContext } from '../productContext';
+// import { useProductContext } from '../productContext';
 import styles from '../styles/order.module.css';
 
+import { useSelector } from 'react-redux';
+import { productSelector } from '../Redux/Reducers/productReducer';
+
 export default function Order(){
-    const { myorders } = useProductContext();
+    const { myorders } = useSelector(productSelector);
 
     const [isLoading, setLoading] = useState(true);
 

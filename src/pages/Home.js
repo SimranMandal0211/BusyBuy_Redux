@@ -8,6 +8,8 @@ import Loader from '../components/Loader';
 import styles from '../styles/home.module.css';
 
 import { authSelector, getInitialUserList, setLoggedIn, setUserLoggedIn } from "../Redux/Reducers/authReducer";
+import { getInitialCartOrdersThunk } from "../Redux/Reducers/productReducer";
+
 
 function Home(){
     // for calling actions
@@ -22,6 +24,12 @@ function Home(){
 
     const [isLoading, setLoading] = useState(true);
 
+     // get the initial data of cart and previous orders history
+     useEffect(() => {
+        dispatch(getInitialCartOrdersThunk());
+    },[userLoggedIn]);
+
+    
     useEffect(() => {
         // show/hide load spinner
         setTimeout(() => {
@@ -47,7 +55,7 @@ function Home(){
         dispatch(getInitialUserList());
     },[isLoggedIn]);
 
-    
+
     return(
         <>
             {isLoading ? <Loader /> :

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import {useProductContext} from '../productContext';
+import { useDispatch, useSelector } from "react-redux";
 
 import CartItem from '../components/Cart/CartItem';
 import Loader from '../components/Loader';
@@ -12,15 +11,25 @@ import { toast } from "react-toastify";
 // react router
 import { useNavigate } from 'react-router-dom';
 
+// actions from Auth and Product Reducers
+import { authSelector } from "../Redux/Reducers/authReducer";
+import { productSelector, purchaseAllThunk } from "../Redux/Reducers/productReducer";
+
 
 export default function Cart(){
-    const {cart, total, itemInCart, purchaseAll} = useProductContext();
+    const dispatch = useDispatch();
 
     const [isLoading,setLoading]=useState(true);
 
     // use in navigate to another page
     const navigate = useNavigate();
 
+    // data of user from Auth Reducer
+    const {userLoggedIn}=useSelector(authSelector);
+
+    // data of cart items from Product Reducer
+    const {cart,total,itemInCart} = useSelector(productSelector);
+     
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
@@ -37,8 +46,8 @@ export default function Cart(){
             return;
         }
 
-        // define in productContext
-        purchaseAll();
+        // purchase function
+        dispatch(purchaseAllThunk());
         toast.success('Your Order has been Placed!!!');
 
         navigate('/order');
@@ -50,7 +59,9 @@ export default function Cart(){
             <div className={styles.cartPageBox}>
                 <div className={styles.cartItemsBox}>
                     {cart.length === 0 ? 
-                        <h1>Nothing in your Cart!!!</h1> :
+                        <h1>Nothing in 
+                            {userLoggedIn.name}
+                             your Cart!!!</h1> :
                         cart.map((product, i) => 
                                     <CartItem key={i} 
                                         product={product} />

@@ -1,12 +1,16 @@
-import { useProductContext } from '../../productContext';
+// for calling reducer actions
+import { useDispatch } from "react-redux";
+// thunk action from Product Reducer
+import { addToCartThunk } from "../../Redux/Reducers/productReducer";
+
 import styles from '../../styles/home.module.css';
 
 function ItemCard(props){
+    // for calling actions
+    const dispatch = useDispatch();
+
     // getting all the value of product from props
     const {name, image, price, category} = props.item;
-
-    // function to add item to cart
-    const {addToCart} = useProductContext();
 
     return(
        <div className={styles.cardContainer}>
@@ -21,7 +25,7 @@ function ItemCard(props){
                 <p>Rs. {price}</p>
             </div>
 
-            <button onClick={() => addToCart(props.item)}>Add To Cart</button>
+            <button onClick={() =>  dispatch(addToCartThunk(props.item)) }>Add To Cart</button>
        </div>
     )
 }
