@@ -8,10 +8,16 @@ import signOutIcon from '../assets/images/signOut.png';
 
 import { Link, NavLink, Outlet } from 'react-router-dom';
 
-import { useAuthValue } from '../authContext';
+import { useDispatch, useSelector } from "react-redux";
+
+import { authSelector, removeSessionThunk } from '../Redux/Reducers/authReducer';
 
 function Navbar(){
-    const {isLoggedIn, signOut} = useAuthValue();
+    
+    // for calling actions
+    const dispatch = useDispatch();
+    // user's login status from redux store
+    const { isLoggedIn } = useSelector(authSelector);
 
     return(
     <>
@@ -48,7 +54,7 @@ function Navbar(){
                     :
                         <>
                             <img src={signOutIcon} alt='signOut' width='40' height='40' /> 
-                            <p onClick={signOut} style={{ margin: '0' }}>Sign Out</p>
+                            <p onClick={() => dispatch(removeSessionThunk())} style={{ margin: '0' }}>Sign Out</p>
                         </>
                     }
                     </span>

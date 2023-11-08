@@ -5,20 +5,22 @@ import '../styles/signInUp.css';
 // navigation router
 import { useNavigate } from "react-router-dom";
 
-// custom context hook (authentication)
-import { useAuthValue } from '../authContext';
+// redux tool for calling actions
+import { useDispatch } from "react-redux";
+
+// Auth Reducer actions for creating a new user 
+import { createUserThunk } from "../Redux/Reducers/authReducer";
 
 function Signup(){
+    // for calling actions
+    const dispatch = useDispatch();
+
     const nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
 
     // navigation variable
     const navigate = useNavigate();
-
-    // for creating new user
-    const { createUser } = useAuthValue();
-
 
     function handleSubmit(e){
         e.preventDefault();
@@ -31,7 +33,7 @@ function Signup(){
 
         console.log('signUp done');
         // creating user
-        createUser(data);
+        dispatch(createUserThunk(data));
         // if user created redirect to corresponding page
         navigate("/signin");
     }

@@ -2,10 +2,17 @@ import {useRef} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import '../styles/signInUp.css';
 
-import { useAuthValue } from '../authContext';
+
+
+// redux tool for calling acitons
+import { useDispatch } from "react-redux";
+
+// reducer actions Auth Reducer
+import { createSessionThunk } from "../Redux/Reducers/authReducer";
 
 function Signin(){
-    const { signIn } = useAuthValue();
+    // for calling actions
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -20,7 +27,7 @@ function Signin(){
         }
         console.log('input signIn ');
         // sign in user
-        const status = await signIn(data);
+        const status=dispatch(createSessionThunk(data));
         status ? navigate('/') : navigate('/signin'); 
     }
 
