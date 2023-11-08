@@ -1,0 +1,76 @@
+.orderContainer{
+    position: absolute;
+    top: 10%;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    /* border: 5px solid green; */
+}
+
+.orderContainer h1{
+    text-align: center;
+    padding: .5rem;
+    color: rgb(8, 127, 255);
+}
+
+.orderListContainer{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    /* border: 5px solid purple; */
+}
+
+/* order detail */
+.shopingMsg{
+    font-size: 1.5rem;
+    color: #0754c6;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    left: 42%;
+    top: 25%;
+}
+
+.OrderDetailBox{
+    /* border: 2px solid red; */
+    margin: 1rem;
+    padding: 1rem;
+    width: 65%;
+    border-radius: .3rem;
+    background: linear-gradient(to bottom right, #17d6d9, #0273dc , #0754c6);
+}
+
+.OrderDetailBox h1{
+    color: rgb(8, 127, 255);
+    background: linear-gradient(to top right, rgb(255, 178, 84), rgb(255, 147, 140), rgb(255, 158, 252));
+    margin-bottom: 1rem;
+}
+
+.OrderDetailBox > table{
+    font-size: 1.2rem;
+    text-align: center;
+    width: 100%;
+    border-collapse: collapse;
+    color: rgb(196, 238, 255);
+}
+
+.OrderDetailBox th, .OrderDetailBox td{
+    padding: .2rem;
+}
+
+.OrderDetailBox .productNameData{
+    width: 50%;
+}
+
+.OrderDetailBox th, .grandTotal{
+    color: rgb(15, 0, 97);
+    font-size: 1.4rem;
+    padding: .5rem;
+    font-weight: bold;
+}
+
+.OrderDetailBox table, .OrderDetailBox th, .OrderDetailBox td {
+    border: 1px solid rgb(202, 235, 249);
+}

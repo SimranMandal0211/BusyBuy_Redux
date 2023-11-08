@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.sign-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #2333f5;
+    height: 85vh;
+}
+
+.sign-form-container{
+    /* border: 2px solid red; */
+    width: 30%;
+}
+
+.sign-form-container h1{
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.sign-form-container .input-field{
+    font-size: 1rem;
+    border-radius: 1rem;
+    outline: none;
+    margin: .5rem 1rem .5rem 0;
+    padding: 0.5rem;
+    width: 60%;
+}
+
+.sign-form-container input{
+    border: 2px solid #a4a4a4;
+    color: black;
+    padding-left: 1rem;
+}
+
+.sign-form-container button{
+    font-weight: bold;
+    background: #095af0;
+    border: none;
+    color: white;
+}
+
