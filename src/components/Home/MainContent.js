@@ -3,7 +3,7 @@ import ItemCard from './ItemCard';
 import styles from '../../styles/home.module.css';
 
 // getting all the product data
-import { data } from "../../Assets/data";
+import { data } from "../../assets/data";
 
 function MainContent(props){
     const { search, price, category } = props

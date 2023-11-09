@@ -18,7 +18,7 @@ const initialState={ userList: [], isLoggedIn: false, userLoggedIn: null };
 export const getInitialUserList = createAsyncThunk(
     "auth/userList", (args, thunkAPI) => {
         // getting datta from firebase
-        const unsub = onSnapshot(collection(db, "buybusy-redux"), (onSnapshot) => {
+        const unsub = onSnapshot(collection(db, "buybusy-redux"), (snapShot) => {
             const users = snapShot.docs.map((doc) => {
                 return {
                     id: doc.id,

@@ -316,7 +316,7 @@ const productSlice = createSlice({
         })
         
         // Update state after decreasing product quantity in cart and database
-        .addCart(decreaseQuantThunk.fulfilled, (state, action) => {
+        .addCase(decreaseQuantThunk.fulfilled, (state, action) => {
             if(state.itemInCart > 1){
                 state.itemInCart--;
             }
@@ -333,7 +333,7 @@ const productSlice = createSlice({
         })
 
         // update state after removing all products from cart
-        .addCart(clearCartThunk.fulfilled, (state,action) => {
+        .addCase(clearCartThunk.fulfilled, (state,action) => {
             state.itemInCart = 0;
             state.total = 0;
             state.cart = [];

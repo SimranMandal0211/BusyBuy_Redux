@@ -7,10 +7,10 @@ import Cart from './pages/Cart';
 import Order from './pages/Order';
 import Error from './pages/Error';
 
-import CustomAuthContext from './authContext';
-import CustomProductContext from './productContext';
 
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import {store} from './store';
 
 function App() {
   const browserRouter = createBrowserRouter([
@@ -39,11 +39,9 @@ function App() {
     }
   ])
   return (
-    <CustomAuthContext>
-      <CustomProductContext>
-        <RouterProvider router={browserRouter}/>
-      </CustomProductContext>
-    </CustomAuthContext>
+    <Provider store={store}>
+      <RouterProvider router={browserRouter}/>
+    </Provider>
   );
 }
 
