@@ -2,35 +2,39 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Pages
-  - Sign In
-  - Sign Up
-  - Home
-  - Cart
-  - Order
+# File Structure
+  ## index
+  ## App
+    <Provider store={store}>
+      <RouterProvider router={bowserRouter} />
+    </Provider>
+  ## Pages
+    1. SignUp Page --> createUserThunk() - for creating new user and store data in DB
+    2. SignIn Page --> createSessionThunk() - for creating session of logged in user
+    3. Home Page --> getInitialCartOrdersThunk() - for getting cart orders from DB --- <Loader /> : { <FilterBar />  and <MainContent /> }
+    4. Cart Page --> PurchaseAllThunk() - purchasing all product --- <Loader /> : { <CartItem /> }
+        CartItem component --> removeFromCartThunk(), increaseQuantThunk(), decreaseQuantThunk()
+    5. Order Page --> <Loader /> : { <OrderDetail /> }
+        OrderDetail component --> showing detail of order products
+    6. Error Page ---> use for showing error
 
-## File Structure
-  - App.js
-    ### `Common in all pages`
-      - Nav
-      - Error
-      - Home
-    ### `More Pages`
+  ## Components
+    1. <Loader /> ---> react-spinner-material package
+    2. <NavBar /> ---> removeSessionTThunk() - for remove session of logged in user
+    3. <OrderDetail /> ---> use in Order Page
+    4. <CartItem />  ---> use in Cart Page
+    5. <FilterBar />  ---> use in Home Page
+    6. <MainContent />  ---> use in Home Page
+
+  ## Redux Folder / reducers
+    1. authReducer --> using createAsyncThunk and createSlice form @redux/toolkit package
+    2. productReducer --> using createAsyncThunk and createSlice from @redux/toolkit package
+    3. store ---> configStore from @redux/toolkit
     
-    - Home
-      - Loader
-      - MainContent
-        - ItemCard
-      - FilterBar
-    - Order
-      - Loader
-      - OrderDetail
-    - Cart
-      - Loader
-      - CartIem
-
-    ### `AuthContex and ProductContext`
-
+    
+    
+    
+    
 
 
 ## Available Scripts
