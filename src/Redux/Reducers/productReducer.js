@@ -31,7 +31,7 @@ function getDate(){
 // async thunk to get initial Data of cart items and order placed by user from database
 export const getInitialCartOrdersThunk = createAsyncThunk(
     'product/getCartOrders',
-    (args,thunkAPI) => {
+    async (args,thunkAPI) => {
         // getting user's data from redux store
         const {authReducer,productReducer} = thunkAPI.getState();
         const {isLoggedIn,userLoggedIn} = authReducer;
@@ -42,9 +42,22 @@ export const getInitialCartOrdersThunk = createAsyncThunk(
 
             const unsub = onSnapshot(doc(db, "buybusy-redux",userLoggedIn.id), (doc) => {
                 // storing all the data in cart
-                const data = doc.data();
-                thunkAPI.dispatch(setCart(data.cart));
-                thunkAPI.dispatch(setMyOrders(data.orders));
+                // const data = doc.data();
+                // thunkAPI.dispatch(setCart(data.cart));
+                // thunkAPI.dispatch(setMyOrders(data.orders));
+
+                if (doc.exists()) {
+                    const data = doc.data();
+                    if (data) {
+                      // storing all the data in cart
+                      if (data.cart) {
+                        thunkAPI.dispatch(setCart(data.cart));
+                      }
+                      if (data.orders) {
+                        thunkAPI.dispatch(setMyOrders(data.orders));
+                      }
+                    }
+                  }
             });
             
             // returning the cart to extraReducer for further operations
