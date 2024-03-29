@@ -4,6 +4,9 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -13,6 +16,8 @@ const firebaseConfig = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID
 };
+
+console.log('firebaseConfig.apiKey: ', firebaseConfig.apiKey);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
