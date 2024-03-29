@@ -212,7 +212,7 @@ export const clearCartThunk = createAsyncThunk(
 
         // if no item in cart then return with message
         if(productReducer.itemInCart === 0){
-            toast.error("othing to remove in Cart!!");
+            toast.error("Nothing to remove in Cart!!");
             return;
         }
 
@@ -223,7 +223,7 @@ export const clearCartThunk = createAsyncThunk(
         });
 
         // notofication
-        toast.success("empty Cart!!");
+        toast.success("Empty Cart!!");
     }
 );
 

@@ -59,9 +59,7 @@ export default function Cart(){
             <div className={styles.cartPageBox}>
                 <div className={styles.cartItemsBox}>
                     {cart.length === 0 ? 
-                        <h1>Nothing in 
-                            {userLoggedIn.name}
-                             your Cart!!!</h1> :
+                        <h1>Nothing in {userLoggedIn.name} your Cart!!!</h1> :
                         cart.map((product, i) => 
                                     <CartItem key={i} 
                                         product={product} />

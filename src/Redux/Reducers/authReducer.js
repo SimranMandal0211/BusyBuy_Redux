@@ -97,7 +97,7 @@ export const createSessionThunk = createAsyncThunk(
         }
         else{
             // if password does'nt match in database
-            toast.error("wrong UaseNAme/Password, Try Again");
+            toast.error("Wrong UaseName/Password, Try Again");
             return false;
         }
     }
