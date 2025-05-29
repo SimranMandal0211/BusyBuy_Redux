@@ -23,7 +23,7 @@ function Navbar(){
     <>
         <div className='nav-container'>
             <Link to='/'>
-                <h2>BuyBusy</h2>
+                <h2>BuyBazar</h2>
             </Link>
 
             <div className='nav-btns'>
